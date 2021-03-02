@@ -301,3 +301,6 @@ src/Middleware/ngrok.exe
 src/UI/Buyer/.DS_Store
 
 src/UI/.DS_Store
+
+
+**/.history/*
