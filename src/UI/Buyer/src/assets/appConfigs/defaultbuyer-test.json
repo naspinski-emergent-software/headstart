@@ -2,15 +2,15 @@
   "hostedApp": true,
   "appname": "Default Buyer TEST",
   "appID": "defaultbuyer-test",
-  "clientID": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+  "clientID": "0FB6AB24-AEC9-4940-8E07-761F60554A6F",
   "incrementorPrefix": "DB_TEST",
-  "baseUrl": "https://my-default-buyer-test.com",
-  "middlewareUrl": "https://my-middleware-api-test.com",
+  "baseUrl": "https://app-order-cloud-buyer.azurewebsites.net",
+  "middlewareUrl": "https://app-order-cloud-middleware.azurewebsites.net/",
   "cmsUrl": "https://ordercloud-cms-test.azurewebsites.net",
   "creditCardIframeUrl": "https://fts-uat.cardconnect.com/itoke/ajax-tokenizer.html",
-  "sellerID": "my-seller-id",
-  "translateBlobUrl": "https://my-translation-files/ngx-translate/i18n/",
+  "sellerID": "emergentsoftware",
+  "translateBlobUrl": "https://stgordercloud.blob.core.windows.net/ngx-translate/",
   "orderCloudApiUrl": "https://sandboxapi.ordercloud.io",
   "theme": { "logoSrc": "assets/generic-logo.png" },
-  "appInsightsInstrumentationKey": null
+  "appInsightsInstrumentationKey": "20d3015e-35ef-4926-aeb1-265064828e8d"
 }
