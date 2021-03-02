@@ -4,7 +4,7 @@
   "sellerName": "StanCo",
   "appname": "Default Admin - PRODUCTION",
   "clientID": "D4E4DB0A-9733-4161-8C38-C90033E29D1F",
-  "middlewareUrl": "https://app-order-cloud-admin.azurewebsites.net",
+  "middlewareUrl": "https://app-order-cloud-middleware.azurewebsites.net",
   "cmsUrl": "https://ordercloud-cms.azurewebsites.net",
   "translateBlobUrl": "https://stgordercloud.blob.core.windows.net/ngx-translate/",
   "blobStorageUrl": "https://stgordercloud.blob.core.windows.net",
