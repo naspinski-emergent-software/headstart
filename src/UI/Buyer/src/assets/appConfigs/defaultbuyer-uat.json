@@ -5,7 +5,7 @@
   "clientID": "0FB6AB24-AEC9-4940-8E07-761F60554A6F",
   "incrementorPrefix": "DB_UAT",
   "baseUrl": "https://app-order-cloud-buyer.azurewebsites.net",
-  "middlewareUrl": "https://app-order-cloud-middleware.azurewebsites.net/",
+  "middlewareUrl": "https://app-order-cloud-middleware.azurewebsites.net",
   "cmsUrl": "https://ordercloud-cms-test.azurewebsites.net",
   "creditCardIframeUrl": "https://fts-uat.cardconnect.com/itoke/ajax-tokenizer.html",
   "sellerID": "emergentsoftware",
