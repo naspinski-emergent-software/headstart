@@ -1,4 +1,5 @@
 import { FormGroup } from "@angular/forms";
+import { User } from "ordercloud-javascript-sdk";
 
 export interface Route {
   title: string
@@ -53,4 +54,18 @@ export interface SummaryResourceInfoPaths {
 
 export interface SummaryResourceInfoPathsDictionary {
   [resourceType: string]: SummaryResourceInfoPaths
+}
+
+export class RegisterModel {
+  firstName: string = ''
+  lastName: string= ''
+  email: string = ''
+  buyerAccessRequests: BuyerAccessRequest[] = []
+  username: string = ''
+  password: string = ''
+}
+
+export class BuyerAccessRequest {
+  buyerId: string = ''
+  buyerName: string = ''
 }

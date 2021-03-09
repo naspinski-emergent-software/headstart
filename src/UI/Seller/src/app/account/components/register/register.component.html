@@ -1,0 +1,136 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 bg-light">
+      <perfect-scrollbar class="full-width"
+        [ngStyle]="{ 'height.px': contentHeight }"
+      >
+        <div class="container-fluid py-3">
+          <form
+            (ngSubmit)="onSubmit()"
+            novalidate *ngIf="form"
+            [formGroup]="form">
+            <div class="row">
+              <div class="col-md-7">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h1 class="resource-name mb-0" translate>Register</h1>
+                </div>
+                <div class="card mt-3 bg-white">
+                  <div class="card-body py-2 px-3">
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label for="username">Username</label>
+                        <input
+                          class="form-control"
+                          type="text"
+                          id="username"
+                          name="username"
+                          formControlName="username"
+                          [value]="register?.username"
+                          (input)="updateRegisterFromEvent($event, 'username')"
+                        />
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="lastName">Password</label>
+                        <input
+                          class="form-control"
+                          type="password"
+                          id="password"
+                          name="password"
+                          formControlName="password"
+                          [value]="register?.password"
+                          (input)="updateRegisterFromEvent($event, 'password')"
+                        />
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label for="firstName">First Name</label>
+                        <input
+                          class="form-control"
+                          type="text"
+                          id="firstName"
+                          name="firstName"
+                          formControlName="firstName"
+                          [value]="register?.firstName"
+                          (input)="updateRegisterFromEvent($event, 'firstName')"
+                        />
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="lastName">Last Name</label>
+                        <input
+                          class="form-control"
+                          type="text"
+                          id="lastName"
+                          name="lastName"
+                          formControlName="lastName"
+                          [value]="register?.lastName"
+                          (input)="updateRegisterFromEvent($event, 'lastName')"
+                        />
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label for="email">Email</label>
+                        <input
+                          class="form-control"
+                          type="text"
+                          id="email"
+                          name="email"
+                          formControlName="email"
+                          [value]="register?.email"
+                          (input)="updateRegisterFromEvent($event, 'email')"
+                        />
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <br />
+                        <button *ngIf="showSave" class="btn btn-outline-dark ml-2">Save</button>
+                      </div>
+                    </div>  
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-5">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h1 class="resource-name mb-0" translate>Request Buyer Access</h1>
+                </div>
+                <div class="card mt-3 bg-white">
+                  <div class="card-body py-2 px-3">
+                    <div class="form-row">
+                      <div class="form-group col-md-10">
+                        <label for="buyers">Buyers</label>
+                        <select
+                          class="form-control"
+                          id="buyers"
+                          name="buyers"
+                          formControlName="buyer"
+                        >
+                          <option *ngFor="let buyer of buyers" [value]="buyer.ID">{{buyer.Name}}{{buyer.ID}}</option>
+                      </select>
+                      </div>
+                      <div class="form-group col-md-2">
+                        <br />
+                        <a (click)="addBuyerAccessRequest()" class="btn btn-outline-dark ml-2">Add</a>
+                      </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-12">
+                      <ul>
+                        <li *ngFor="let request of register.buyerAccessRequests">
+                          {{ request.buyerName }}
+                          <fa-icon class="mr-2 text-muted" [icon]="faTrash" (click)="removeBuyerAccessRequest(request.buyerId)"></fa-icon>
+                        </li>
+                      </ul>
+                      </div>
+                    </div> 
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </perfect-scrollbar>
+    </div>
+  </div>
+</div>

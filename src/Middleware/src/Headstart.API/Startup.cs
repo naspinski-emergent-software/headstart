@@ -106,6 +106,7 @@ namespace Headstart.API
                 .Inject<ILineItemCommand>()
                 .Inject<IMeProductCommand>()
                 .Inject<IHSCatalogCommand>()
+                .Inject<IHSRegisterCommand>()
                 .Inject<ISendgridService>()
                 .Inject<IHSSupplierCommand>()
                 .Inject<ICreditCardCommand>()

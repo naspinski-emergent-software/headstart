@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core'
 import { SharedModule } from '@app-seller/shared'
 import { AccountRoutingModule } from './account-routing.module'
 import { AccountComponent } from './components/account/account.component'
+import { RegisterComponent } from './components/register/register.component'
 import { NotificationsComponent } from './components/notifications/notifications.component'
 import { AccountMenuComponent } from './components/account-menu/account-menu.component'
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar'
@@ -15,6 +16,7 @@ import { SellerEmailNotifications } from './components/notifications/seller-emai
     AccountMenuComponent,
     NotificationsComponent,
     SellerEmailNotifications,
+    RegisterComponent
   ],
 })
 export class AccountModule {}

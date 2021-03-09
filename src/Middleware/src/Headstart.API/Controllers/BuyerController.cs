@@ -6,6 +6,7 @@ using Headstart.Models.Attributes;
 using ordercloud.integrations.library;
 using Headstart.API.Commands;
 using OrderCloud.Catalyst;
+using System.Collections.Generic;
 
 namespace Headstart.Common.Controllers
 {
@@ -14,7 +15,6 @@ namespace Headstart.Common.Controllers
     [Route("buyer")]
     public class BuyerController : BaseController
     {
-        
         private readonly IHSBuyerCommand _command;
         private readonly IOrderCloudClient _oc;
         public BuyerController(IHSBuyerCommand command, IOrderCloudClient oc)
@@ -42,6 +42,13 @@ namespace Headstart.Common.Controllers
         public async Task<SuperHSBuyer> Get(string buyerID)
         {
             return await _command.Get(buyerID, UserContext.AccessToken);
+        }
+
+        [DocName("GET All Headstart Buyers")]
+        [HttpGet]
+        public async Task<List<Buyer>> GetAll()
+        {
+            return await _oc.Buyers.ListAllAsync();
         }
     }
 }
