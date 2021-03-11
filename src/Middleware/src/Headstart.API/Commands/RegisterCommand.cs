@@ -2,6 +2,7 @@ using Headstart.Common;
 using Headstart.Models;
 using OrderCloud.SDK;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,6 +12,7 @@ namespace Headstart.API.Commands
     {
         Task<HSRegister> Create(HSRegister register);
         Task<HSRegister> ApproveOrDenyBuyerAccess(BuyerAccessApproval request);
+        Task<IEnumerable<HSRegister>> List();
     }
     public class HSRegisterCommand : IHSRegisterCommand
     {
@@ -25,8 +27,8 @@ namespace Headstart.API.Commands
 
         public async Task<HSRegister> Create(HSRegister register)
         {
-            var admins = await _oc.AdminUsers.ListAsync<HSRegister>(search: register.Username);
-            var existingRegister = admins.Items.FirstOrDefault(x => x.Username.ToLower().Trim() == register.Username.ToLower().Trim());
+            var users = await _oc.AdminUsers.ListAsync<HSRegister>(search: register.Username);
+            var existingRegister = users.Items.FirstOrDefault(x => x.Username.ToLower().Trim() == register.Username.ToLower().Trim());
 
             register.xp.BuyerAccessRequests.ToList().ForEach(x => x.Approved = null); // makes sure nothing can be sent in approved
 
@@ -34,7 +36,7 @@ namespace Headstart.API.Commands
             {
                 try
                 {
-                    var tempToken = await _oc.AuthenticateAsync("D4E4DB0A-9733-4161-8C38-C90033E29D1F", register.Username, register.Password, new[] { ApiRole.BuyerAdmin });
+                    var tempToken = await _oc.AuthenticateAsync(_settings.OrderCloudSettings.MiddlewareClientID, register.Username, register.Password, new[] { ApiRole.BuyerAdmin });
                     if (string.IsNullOrWhiteSpace(tempToken.AccessToken))
                         throw new AccessViolationException("invalid password supplied");
                 }
@@ -61,6 +63,12 @@ namespace Headstart.API.Commands
             {
                 return await _oc.AdminUsers.CreateAsync<HSRegister>(register);
             }
+        }
+
+        public async Task<IEnumerable<HSRegister>> List()
+        {
+            var users = (await _oc.AdminUsers.ListAsync<HSRegister>()).Items;
+            return users.Where(x => x.xp != null && x.xp.BuyerAccessRequests != null && x.xp.BuyerAccessRequests.Any(x => !x.Approved.HasValue));
         }
 
         public async Task<HSRegister> ApproveOrDenyBuyerAccess(BuyerAccessApproval buyerAccessApproval)

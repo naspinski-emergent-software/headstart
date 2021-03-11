@@ -1,12 +1,9 @@
-import { Component, ChangeDetectorRef, Inject } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
-import { applicationConfiguration } from '@app-seller/config/app.config'
+import { Component } from '@angular/core'
 import { FormGroup, FormControl, Validators } from '@angular/forms'
-import { AppConfig } from '@app-seller/models/environment.types'
 import { isEqual as _isEqual, set as _set, get as _get } from 'lodash'
-import { RegisterModel, BuyerAccessRequest } from '../../../models/shared.types'
+import { RegisterModel } from '../../../models/shared.types'
 import { AdminUsers, User, Buyer  } from 'ordercloud-javascript-sdk'
-import { RegisterService } from '../../../../services/register.service'
+import { RegisterService } from '../services/register.service'
 import {
   faTrash
 } from '@fortawesome/free-solid-svg-icons'
@@ -23,14 +20,11 @@ export class RegisterComponent {
 
   form: FormGroup
   register: RegisterModel = new RegisterModel()
+  //registerService: RegisterService = new RegisterService()
   buyers: Buyer<any>[] = []
-  registerService: RegisterService = new RegisterService()
 
   constructor(
-    router: Router,
-    activatedRoute: ActivatedRoute,
-    changeDetectorRef: ChangeDetectorRef,
-    @Inject(applicationConfiguration) appConfig: AppConfig
+    public registerService: RegisterService
   ) {
     this.createRegisterForm()
     this.loadBuyers()

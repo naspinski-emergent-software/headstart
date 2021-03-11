@@ -8,6 +8,9 @@ import { AccountMenuComponent } from './components/account-menu/account-menu.com
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar'
 import { AccountSummaryComponent } from './components/account-summary/account-summary.component'
 import { SellerEmailNotifications } from './components/notifications/seller-email-notifications/seller-email-notifications.component'
+import { AppAuthService } from '@app-seller/auth/services/app-auth.service'
+import { RegisterService } from './components/services/register.service'
+
 @NgModule({
   imports: [SharedModule, AccountRoutingModule, PerfectScrollbarModule],
   declarations: [
@@ -18,5 +21,8 @@ import { SellerEmailNotifications } from './components/notifications/seller-emai
     SellerEmailNotifications,
     RegisterComponent
   ],
+  providers: [
+    RegisterService
+  ]
 })
 export class AccountModule {}

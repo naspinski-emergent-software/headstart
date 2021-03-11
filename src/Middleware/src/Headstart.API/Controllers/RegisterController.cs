@@ -6,12 +6,13 @@ using Headstart.Models.Attributes;
 using ordercloud.integrations.library;
 using Headstart.API.Commands;
 using OrderCloud.Catalyst;
+using System.Collections.Generic;
 
 namespace Headstart.Common.Controllers
 {
     [DocComments("\"Register\" self-registration actions")]
     [HSSection.Integration(ListOrder = 6)]
-    [Route("register")]
+    [Route("adminuser")]
     public class RegisterController : BaseController
     {
         private readonly IHSRegisterCommand _command;
@@ -23,32 +24,24 @@ namespace Headstart.Common.Controllers
         }
 
         [DocName("POST Headstart Register")]
-        [HttpPost]
+        [HttpPost, Route("register")]
         public async Task<HSRegister> Create([FromBody] HSRegister register)
         {
             return await _command.Create(register);
         }
 
         [DocName("PUT Headstart Admin Buyer Access Approval/Denial")]
-        [Route("buyer-access")]
-        [HttpPut]
-        public async Task<HSRegister> DenyBuyerAccess([FromBody] BuyerAccessApproval request)
+        [HttpPut, Route("buyer-access-approval"), OrderCloudUserAuth(ApiRole.AdminUserAdmin)]
+        public async Task<HSRegister> ApproveOrDenyBuyerAccess([FromBody] BuyerAccessApproval request)
         {
             return await _command.ApproveOrDenyBuyerAccess(request);
         }
 
-        //[DocName("PUT Headstart Buyer")]
-        //[HttpPut, Route("{buyerID}"), OrderCloudUserAuth(ApiRole.BuyerAdmin)]
-        //public async Task<SuperHSBuyer> Put([FromBody] SuperHSBuyer superBuyer, string buyerID)
-        //{
-        //    return await _command.Update(buyerID, superBuyer, UserContext.AccessToken);
-        //}
-
-        //[DocName("GET Headstart Buyer")]
-        //[HttpGet, Route("{buyerID}"), OrderCloudUserAuth(ApiRole.BuyerAdmin)]
-        //public async Task<SuperHSBuyer> Get(string buyerID)
-        //{
-        //    return await _command.Get(buyerID, UserContext.AccessToken);
-        //}
+        [DocName("GET Headstart Admins with Buyer Access Approvals")]
+        [HttpGet, Route("buyer-access-approval"), OrderCloudUserAuth(ApiRole.AdminUserAdmin)]
+        public async Task<IEnumerable<HSRegister>> Get()
+        {
+            return await _command.List();
+        }
     }
 }
