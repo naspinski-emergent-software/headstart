@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, Inject } from '@angular/core'
 import { FormGroup, FormControl, Validators } from '@angular/forms'
 import { isEqual as _isEqual, set as _set, get as _get } from 'lodash'
 import { RegisterModel } from '../../../models/shared.types'
@@ -8,7 +8,9 @@ import {
   faTrash
 } from '@fortawesome/free-solid-svg-icons'
 import { ValidateStrongPassword } from '@app-seller/validators/validators'
+import { applicationConfiguration } from '@app-seller/config/app.config'
 import { ToastrService } from 'ngx-toastr'
+import { AppConfig } from '@app-seller/models/environment.types'
 import { AxiosError } from 'axios'
 
 @Component({
@@ -30,7 +32,8 @@ export class RegisterComponent {
 
   constructor(
     public registerService: RegisterService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    @Inject(applicationConfiguration) private appConfig: AppConfig
   ) {
     this.createRegisterForm()
     this.loadBuyers()

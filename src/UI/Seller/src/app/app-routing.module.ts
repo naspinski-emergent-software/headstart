@@ -8,6 +8,11 @@ import { CanEditMySupplierGuard } from './shared/guards/can-edit-my-supplier/can
 
 const routes: Routes = [
   {
+    path: 'register',
+    loadChildren: () => 
+      import('./register/register.module').then((m) => m.RegisterModule)
+  },
+  {
     path: '',
     canActivate: [HasToken],
     children: [
