@@ -55,6 +55,11 @@ export class RegisterService {
       BuyerId: request.BuyerId,
       Approved: approved
     }
-    return (await axios.put(`${ocAppConfig.middlewareUrl}/adminuser/buyer-access-approval`, data)).data
+    const accessToken = await this.appAuthService.fetchToken().toPromise()
+    return (await axios.put(`${ocAppConfig.middlewareUrl}/adminuser/buyer-access-approval`, data, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })).data
   }
 }

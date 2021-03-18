@@ -9,6 +9,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { ValidateStrongPassword } from '@app-seller/validators/validators'
 import { ToastrService } from 'ngx-toastr'
+import { AxiosError } from 'axios'
 
 @Component({
   selector: 'register',
@@ -98,6 +99,14 @@ export class RegisterComponent {
           this.toastrService.success("request saved", "Success")
           this.form.reset()
         }
+      }).catch((err: AxiosError) => {
+        let errorMessage = 'unknown error'
+        if (err.message.indexOf(' 400 ')) {
+          errorMessage = 'user exists: wrong password was supplied or user not active'
+        } else if (err.message.indexOf(' 409 ')) {
+          errorMessage = 'incorrect clientID specified, contact administrator'
+        }
+        this.toastrService.error(errorMessage, "Error submitting")
       })
   }
 }

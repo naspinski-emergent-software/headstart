@@ -31,7 +31,11 @@ export class ApprovalComponent {
 
   async loadUsers(): Promise<void> {
     this.users = []
-    await this.registerService.getUsersWithPendingAccessApprovals().then(x => this.users = x)
+    await this.registerService.getUsersWithPendingAccessApprovals().then(x => {
+      const users = x;
+      users.forEach(u => u.xp.BuyerAccessRequests = u.xp.BuyerAccessRequests.filter(r => r.Approved === null))
+      this.users = users
+    })
     this.isLoaded = true
   }
 

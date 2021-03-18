@@ -27,7 +27,7 @@ namespace Headstart.API.Commands
 
         public async Task<HSRegister> Create(HSRegister register)
         {
-            var users = await _oc.AdminUsers.ListAsync<HSRegister>(search: register.Username);
+            var users = await _oc.AdminUsers.ListAsync<HSRegister>(search: register.Username.Trim());
             var existingRegister = users.Items.FirstOrDefault(x => x.Username.ToLower().Trim() == register.Username.ToLower().Trim());
 
             register.xp.BuyerAccessRequests.ToList().ForEach(x => x.Approved = null); // makes sure nothing can be sent in approved
@@ -36,7 +36,7 @@ namespace Headstart.API.Commands
             {
                 try
                 {
-                    var tempToken = await _oc.AuthenticateAsync(_settings.OrderCloudSettings.MiddlewareClientID, register.Username, register.Password, new[] { ApiRole.BuyerAdmin });
+                    var tempToken = await _oc.AuthenticateAsync("078B4032-EA12-431F-B32B-4DAF790A152F", register.Username, register.Password, new[] { ApiRole.BuyerAdmin });
                     if (string.IsNullOrWhiteSpace(tempToken.AccessToken))
                         throw new AccessViolationException("invalid password supplied");
                 }
