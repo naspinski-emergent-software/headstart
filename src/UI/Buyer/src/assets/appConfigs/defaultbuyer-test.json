@@ -12,5 +12,6 @@
   "translateBlobUrl": "https://stgordercloud.blob.core.windows.net/ngx-translate/",
   "orderCloudApiUrl": "https://sandboxapi.ordercloud.io",
   "theme": { "logoSrc": "assets/generic-logo.png" },
+  "instrumentationKey": null
   "appInsightsInstrumentationKey": "20d3015e-35ef-4926-aeb1-265064828e8d"
 }

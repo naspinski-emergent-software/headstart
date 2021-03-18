@@ -5,6 +5,8 @@
 const brand = Brand.DEFAULT_BUYER
 const appEnvironment = Environment.TEST
 const useLocalMiddleware = true
+const useLocalBuyerApiClient = false // set to true for running integration events locally
+const localBuyerApiClient = '800EFEC0-43A5-4EB6-9150-C3BBE628214C'
 const localMiddlewareURL = 'https://localhost:44358'
 // ====================================================================
 // ======= UNLESS YOU ARE DOING SOMETHING WEIRD =======================
@@ -38,5 +40,8 @@ target.hostedApp = false
 target.appInsightsInstrumentationKey = ''
 if (useLocalMiddleware) {
   target.middlewareUrl = localMiddlewareURL
+}
+if (useLocalBuyerApiClient) {
+  target.clientID = localBuyerApiClient
 }
 export const environment = target
