@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core'
-import { RegisterModel } from '@app-seller/shared'
+import { BuyerAccessRequest, RegisterModel } from '@app-seller/shared'
 import axios from 'axios'
 import { Buyer, User } from 'ordercloud-javascript-sdk'
 import { ocAppConfig } from '@app-seller/config/app.config'
-import { AppAuthService } from '../../../auth/services/app-auth.service'
+import { AppAuthService } from '../../auth/services/app-auth.service'
 
 @Injectable({
   providedIn: 'root',
@@ -47,5 +47,14 @@ export class RegisterService {
       }
     }
     return (await axios.post(`${ocAppConfig.middlewareUrl}/adminuser/register`, data)).data
+  }
+
+  public processAccessRequest = async (userId: string, approved: boolean, request: BuyerAccessRequest) : Promise<any> => {
+    const data = {
+      UserId: userId,
+      BuyerId: request.BuyerId,
+      Approved: approved
+    }
+    return (await axios.put(`${ocAppConfig.middlewareUrl}/adminuser/buyer-access-approval`, data)).data
   }
 }

@@ -13,7 +13,24 @@
               <div class="card mt-3 bg-white">
                 <div class="card-body py-2 px-3">
                   <div class="form-row">
-                    stuff here
+                    <ul>
+                      <li *ngFor="let user of users">
+                        {{ user.Username }} ({{user.Email}})
+                        <ul>
+                          <li *ngFor="let request of user.xp.BuyerAccessRequests">
+                            {{ request.BuyerName }}
+                            <button class="btn btn-sm btn-danger" (click)="processRequest(user.ID, false, request)">
+                              <fa-icon [icon]="faThumbsDown"></fa-icon>
+                            </button>
+                            <button class="btn btn-sm btn-success" (click)="processRequest(user.ID, true, request)">
+                              <fa-icon [icon]="faThumbsUp"></fa-icon>
+                            </button>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                    <div *ngIf="!isLoaded">loading</div>
+                    <div *ngIf="isLoaded && users.length === 0">no pending requests</div>
                   </div>
                 </div>
               </div>

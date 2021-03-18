@@ -86,13 +86,29 @@ namespace Headstart.API.Commands
                 xp = new { BuyerAccessRequests = requests },
                 Active = buyerAccessApproval.Approved || user.Active
             };
-            await ActivateOrDeactivateBuyerAccess(buyerAccessApproval);
+            await ActivateBuyerAccess(buyerAccessApproval);
+
             return await _oc.AdminUsers.PatchAsync<HSRegister>(user.ID, partialUser);
         }
 
-        private async Task ActivateOrDeactivateBuyerAccess(BuyerAccessApproval buyerAccessApproval)
+        private async Task ActivateBuyerAccess(BuyerAccessApproval buyerAccessApproval)
         {
-            // TODO: how do I do this?
+            if (buyerAccessApproval.Approved)
+            {
+                // add to the user group (silent if they are already in it)
+                await _oc.AdminUserGroups.SaveUserAssignmentAsync(new UserGroupAssignment()
+                {
+                     UserGroupID = "Admin_BuyerImpersonator",
+                     UserID = buyerAccessApproval.UserId
+                });
+                await _oc.ImpersonationConfigs.CreateAsync(new ImpersonationConfig()
+                {
+                    ImpersonationUserID = buyerAccessApproval.UserId,
+                    BuyerID = buyerAccessApproval.BuyerId,
+                    SecurityProfileID = "HSBuyerAdmin",
+                    ClientID = _settings.OrderCloudSettings.MiddlewareClientID
+                });
+            }
         }
     }
 }

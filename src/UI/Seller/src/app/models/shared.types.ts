@@ -66,6 +66,10 @@ export class RegisterModel {
 }
 
 export class BuyerAccessRequest {
-  buyerId: string = ''
-  buyerName: string = ''
+  BuyerId: string = ''
+  BuyerName: string = ''
+}
+
+export class BuyerAccessRequestXp {
+  BuyerAccessRequests: BuyerAccessRequest[] = [] 
 }

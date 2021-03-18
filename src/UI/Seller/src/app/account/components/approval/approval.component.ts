@@ -1,13 +1,12 @@
 import { Component, ChangeDetectorRef, Inject } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
 import { applicationConfiguration } from '@app-seller/config/app.config'
 import { AppConfig } from '@app-seller/models/environment.types'
 import { isEqual as _isEqual, set as _set, get as _get } from 'lodash'
 import { User  } from 'ordercloud-javascript-sdk'
-import { RegisterService } from '../services/register.service'
-import { faTrash, faThumbsUp } from '@fortawesome/free-solid-svg-icons'
+import { RegisterService } from '../../services/register.service'
+import { faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons'
 import { ToastrService } from 'ngx-toastr'
-import { takeWhile } from 'rxjs/operators'
+import { BuyerAccessRequest, BuyerAccessRequestXp } from '../../../models/shared.types'
 
 @Component({
   selector: 'approval',
@@ -16,10 +15,11 @@ import { takeWhile } from 'rxjs/operators'
 })
 export class ApprovalComponent {
   
-  faTrash = faTrash
+  faThumbsDown = faThumbsDown
   faThumbsUp = faThumbsUp
+  isLoaded: boolean = false
 
-  users: User<any>[] = []
+  users: User<BuyerAccessRequestXp>[] = []
 
   constructor(
     public registerService: RegisterService,
@@ -30,6 +30,23 @@ export class ApprovalComponent {
   }
 
   async loadUsers(): Promise<void> {
+    this.users = []
     await this.registerService.getUsersWithPendingAccessApprovals().then(x => this.users = x)
+    this.isLoaded = true
+  }
+
+  async processRequest(userId: string, approve: boolean, request: BuyerAccessRequest) {
+    await this.registerService.processAccessRequest(userId, approve, request).then(x => {
+      
+      if (approve)
+        this.toastrService.success(`Request for access to ${request.BuyerName} was approved`, 'Access approved');
+      else
+        this.toastrService.info(`Request for access to ${request.BuyerName} was denied`, 'Access denied');
+
+      const user = this.users.find(x => x.ID === userId)
+      user.xp.BuyerAccessRequests = user.xp.BuyerAccessRequests.filter(x => x.BuyerId !== request.BuyerId);
+      if (user.xp.BuyerAccessRequests.length === 0)
+       this.users = this.users.filter(x => x.ID !== userId)
+   })
   }
 }

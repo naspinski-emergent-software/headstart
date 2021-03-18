@@ -2,12 +2,13 @@ import { Component } from '@angular/core'
 import { FormGroup, FormControl, Validators } from '@angular/forms'
 import { isEqual as _isEqual, set as _set, get as _get } from 'lodash'
 import { RegisterModel } from '../../../models/shared.types'
-import { AdminUsers, User, Buyer  } from 'ordercloud-javascript-sdk'
-import { RegisterService } from '../services/register.service'
+import { Buyer  } from 'ordercloud-javascript-sdk'
+import { RegisterService } from '../../services/register.service'
 import {
   faTrash
 } from '@fortawesome/free-solid-svg-icons'
 import { ValidateStrongPassword } from '@app-seller/validators/validators'
+import { ToastrService } from 'ngx-toastr'
 
 @Component({
   selector: 'register',
@@ -20,11 +21,15 @@ export class RegisterComponent {
 
   form: FormGroup
   register: RegisterModel = new RegisterModel()
-  //registerService: RegisterService = new RegisterService()
   buyers: Buyer<any>[] = []
 
+  get showSave(): boolean {
+    return this.form.valid && this.register.buyerAccessRequests.length > 0
+  }
+
   constructor(
-    public registerService: RegisterService
+    public registerService: RegisterService,
+    private toastrService: ToastrService
   ) {
     this.createRegisterForm()
     this.loadBuyers()
@@ -69,14 +74,14 @@ export class RegisterComponent {
   updateBuyerAccessRequest(buyerId: string, isDelete: boolean): void {
     const updateRegisterCopy: RegisterModel = this.getRegister()
     if (buyerId && buyerId.length > 0) {
-      const existingBuyer = updateRegisterCopy.buyerAccessRequests.find(x => x.buyerId === buyerId);
+      const existingBuyer = updateRegisterCopy.buyerAccessRequests.find(x => x.BuyerId === buyerId);
       const idx = updateRegisterCopy.buyerAccessRequests.indexOf(existingBuyer)
       
       if(isDelete && idx > -1) {
         updateRegisterCopy.buyerAccessRequests.splice(idx, 1)
       } else if(!isDelete && idx === -1) {
         const buyer = this.buyers.find(x => x.ID === buyerId)
-        updateRegisterCopy.buyerAccessRequests.push({ buyerId: buyer.ID, buyerName: buyer.Name})
+        updateRegisterCopy.buyerAccessRequests.push({ BuyerId: buyer.ID, BuyerName: buyer.Name})
       }
     }
     this.register = updateRegisterCopy
@@ -85,32 +90,14 @@ export class RegisterComponent {
   getRegister(): RegisterModel {
     return JSON.parse(JSON.stringify(this.register))
   }
-
-  async save(): Promise<User> {
-    const user: User = {
-      Username: this.form.value.FirstName,
-      FirstName: this.form.value.FirstName,
-      LastName: this.form.value.LastName,
-      Email: this.form.value.FirstName,
-      Active: false,
-      xp: {
-        BuyerRequests: this.register.buyerAccessRequests.map(x => ({ buyer: x, approved: null }))
-      }
-    }
-
-    return await AdminUsers.Save(this.form.value.Username, user)
-  }
   
   async onSubmit(): Promise<void> {
     await this.registerService.postRegistration(this.register)
       .then(x => {
         if (x.Email) {
+          this.toastrService.success("request saved", "Success")
           this.form.reset()
         }
       })
-  }
-
-  showSave(): boolean {
-    return this.form.valid && this.register.buyerAccessRequests.length > 0
   }
 }

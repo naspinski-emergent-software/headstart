@@ -2,7 +2,7 @@
   "hostedApp": true,
   "appname": "Default Buyer TEST",
   "appID": "defaultbuyer-test",
-  "clientID": "0FB6AB24-AEC9-4940-8E07-761F60554A6F",
+  "clientID": "D929172D-32AB-4F7B-9021-DC2EAD087F4E",
   "incrementorPrefix": "DB_TEST",
   "baseUrl": "https://app-order-cloud-buyer.azurewebsites.net",
   "middlewareUrl": "https://app-order-cloud-middleware.azurewebsites.net",

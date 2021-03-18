@@ -3,7 +3,7 @@
   "sellerID": "StanCo",
   "sellerName": "StanCo",
   "appname": "Default Admin - PRODUCTION",
-  "clientID": "D4E4DB0A-9733-4161-8C38-C90033E29D1F",
+  "clientID": "078B4032-EA12-431F-B32B-4DAF790A152F",
   "middlewareUrl": "https://app-order-cloud-middleware.azurewebsites.net",
   "cmsUrl": "https://ordercloud-cms.azurewebsites.net",
   "translateBlobUrl": "https://stgordercloud.blob.core.windows.net/ngx-translate/",
@@ -11,7 +11,7 @@
   "orderCloudApiUrl": "https://sandboxapi.ordercloud.io",
   "buyerConfigs": {
     "Default Buyer": {
-      "clientID": "0FB6AB24-AEC9-4940-8E07-761F60554A6F",
+      "clientID": "D929172D-32AB-4F7B-9021-DC2EAD087F4E",
       "buyerUrl": "https://my-default-buyer-test.com/"
     }
   },
