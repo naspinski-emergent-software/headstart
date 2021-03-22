@@ -1,5 +1,7 @@
-﻿using ordercloud.integrations.library;
+﻿using Microsoft.WindowsAzure.Storage.Table;
+using ordercloud.integrations.library;
 using OrderCloud.SDK;
+using System;
 using System.Collections.Generic;
 
 namespace Headstart.Models
@@ -12,21 +14,29 @@ namespace Headstart.Models
     //}
 
     [SwaggerModel]
-    public class HSRegister : User<RegisterXp>, IHSObject
+    public class HSRegister : User, IHSObject
     {
-
+        public IEnumerable<BuyerAccessRequest> BuyerAccessRequests { get; set; } = new List<BuyerAccessRequest>();
     }
 
-    [SwaggerModel]
-    public class RegisterXp
-    {
-        // temporary field while waiting on content docs
-        public IEnumerable<BuyerAccessRequest> BuyerAccessRequests { get; set; }
-    }
+    //[SwaggerModel]
+    //public class RegisterXp
+    //{
+    //    // temporary field while waiting on content docs
+    //    public IEnumerable<BuyerAccessRequest> BuyerAccessRequests { get; set; }
+    //}
 
-    public class BuyerAccessRequest
+    public class BuyerAccessRequest : TableEntity, ITableEntity
     {
-        public string BuyerId { get; set; }
+        public BuyerAccessRequest() { }
+        public BuyerAccessRequest(string userId, string buyerId)
+        {
+            PartitionKey = userId;
+            RowKey = buyerId;
+        }
+
+        public string BuyerId { get => RowKey; set => RowKey = value; }
+        public string UserId { get => PartitionKey; set => PartitionKey = value; }
         public string BuyerName { get; set; }
         public bool? Approved { get; set; }
     }

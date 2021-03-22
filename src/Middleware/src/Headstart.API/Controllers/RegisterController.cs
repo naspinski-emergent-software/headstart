@@ -32,9 +32,9 @@ namespace Headstart.Common.Controllers
 
         [DocName("PUT Headstart Admin Buyer Access Approval/Denial")]
         [HttpPut, Route("buyer-access-approval"), OrderCloudUserAuth(ApiRole.AdminUserAdmin)]
-        public async Task<HSRegister> ApproveOrDenyBuyerAccess([FromBody] BuyerAccessApproval request)
+        public async Task ApproveOrDenyBuyerAccess([FromBody] BuyerAccessApproval request)
         {
-            return await _command.ApproveOrDenyBuyerAccess(request);
+            await _command.ApproveOrDenyBuyerAccess(request);
         }
 
         [DocName("GET Headstart Admins with Buyer Access Approvals")]

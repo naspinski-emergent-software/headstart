@@ -17,7 +17,7 @@
                       <li *ngFor="let user of users">
                         {{ user.Username }} ({{user.Email}})
                         <ul>
-                          <li *ngFor="let request of user.xp.BuyerAccessRequests">
+                          <li *ngFor="let request of user.BuyerAccessRequests">
                             {{ request.BuyerName }}
                             <button class="btn btn-sm btn-danger" (click)="processRequest(user.ID, false, request)">
                               <fa-icon [icon]="faThumbsDown"></fa-icon>

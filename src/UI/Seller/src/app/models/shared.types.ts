@@ -57,19 +57,18 @@ export interface SummaryResourceInfoPathsDictionary {
 }
 
 export class RegisterModel {
-  firstName: string = ''
-  lastName: string= ''
-  email: string = ''
-  buyerAccessRequests: BuyerAccessRequest[] = []
-  username: string = ''
-  password: string = ''
+  ID: string = ''
+  FirstName: string = ''
+  LastName: string= ''
+  Email: string = ''
+  BuyerAccessRequests: BuyerAccessRequest[] = []
+  Username: string = ''
+  Password: string = ''
+  Active: boolean = false
 }
 
 export class BuyerAccessRequest {
   BuyerId: string = ''
   BuyerName: string = ''
-}
-
-export class BuyerAccessRequestXp {
-  BuyerAccessRequests: BuyerAccessRequest[] = [] 
+  Approved: boolean = null
 }

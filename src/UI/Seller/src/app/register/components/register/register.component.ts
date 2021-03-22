@@ -27,7 +27,7 @@ export class RegisterComponent {
   buyers: Buyer<any>[] = []
 
   get showSave(): boolean {
-    return this.form.valid && this.register.buyerAccessRequests.length > 0
+    return this.form.valid && this.register.BuyerAccessRequests.length > 0
   }
 
   constructor(
@@ -78,14 +78,14 @@ export class RegisterComponent {
   updateBuyerAccessRequest(buyerId: string, isDelete: boolean): void {
     const updateRegisterCopy: RegisterModel = this.getRegister()
     if (buyerId && buyerId.length > 0) {
-      const existingBuyer = updateRegisterCopy.buyerAccessRequests.find(x => x.BuyerId === buyerId);
-      const idx = updateRegisterCopy.buyerAccessRequests.indexOf(existingBuyer)
+      const existingBuyer = updateRegisterCopy.BuyerAccessRequests.find(x => x.BuyerId === buyerId);
+      const idx = updateRegisterCopy.BuyerAccessRequests.indexOf(existingBuyer)
       
       if(isDelete && idx > -1) {
-        updateRegisterCopy.buyerAccessRequests.splice(idx, 1)
+        updateRegisterCopy.BuyerAccessRequests.splice(idx, 1)
       } else if(!isDelete && idx === -1) {
         const buyer = this.buyers.find(x => x.ID === buyerId)
-        updateRegisterCopy.buyerAccessRequests.push({ BuyerId: buyer.ID, BuyerName: buyer.Name})
+        updateRegisterCopy.BuyerAccessRequests.push({ BuyerId: buyer.ID, BuyerName: buyer.Name, Approved: null})
       }
     }
     this.register = updateRegisterCopy
@@ -96,6 +96,7 @@ export class RegisterComponent {
   }
   
   async onSubmit(): Promise<void> {
+    debugger
     await this.registerService.postRegistration(this.register)
       .then(x => {
         if (x.Email) {

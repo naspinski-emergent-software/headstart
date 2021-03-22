@@ -24,29 +24,18 @@ export class RegisterService {
     return (await axios.get(`${ocAppConfig.middlewareUrl}/buyer`)).data
   }
 
-  public getUsersWithPendingAccessApprovals = async (): Promise<User<any>[]> => {
+  public getUsersWithPendingAccessApprovals = async (): Promise<RegisterModel[]> => {
 
     const accessToken = await this.appAuthService.fetchToken().toPromise()
     return (await axios.get(`${ocAppConfig.middlewareUrl}/adminuser/buyer-access-approval`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
+      headers: { Authorization: `Bearer ${accessToken}` }
     })).data
   }
 
   public postRegistration = async (registerModel: RegisterModel): Promise<User> => {
-    const data = {
-      username: registerModel.username,
-      firstName: registerModel.firstName,
-      lastName: registerModel.lastName,
-      email: registerModel.email,
-      password: registerModel.password,
-      active: false,
-      xp: {
-        buyerAccessRequests: registerModel.buyerAccessRequests
-      }
-    }
-    return (await axios.post(`${ocAppConfig.middlewareUrl}/adminuser/register`, data)).data
+    registerModel.Active = false;
+    debugger;
+    return (await axios.post(`${ocAppConfig.middlewareUrl}/adminuser/register`, registerModel)).data
   }
 
   public processAccessRequest = async (userId: string, approved: boolean, request: BuyerAccessRequest) : Promise<any> => {
@@ -57,9 +46,7 @@ export class RegisterService {
     }
     const accessToken = await this.appAuthService.fetchToken().toPromise()
     return (await axios.put(`${ocAppConfig.middlewareUrl}/adminuser/buyer-access-approval`, data, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
+      headers: { Authorization: `Bearer ${accessToken}` }
     })).data
   }
 }

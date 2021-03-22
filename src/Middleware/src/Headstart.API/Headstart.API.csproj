@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\AzureStorageUtilities\AzureStorageUtilities.csproj" />
     <ProjectReference Include="..\Headstart.Common\Headstart.Common.csproj" />
   </ItemGroup>
 

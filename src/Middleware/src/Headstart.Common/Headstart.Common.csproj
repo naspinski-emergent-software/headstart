@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\AzureStorageUtilities\AzureStorageUtilities.csproj" />
     <ProjectReference Include="..\..\integrations\ordercloud-integrations-smartystreets\ordercloud.integrations.smartystreets.csproj" />
     <ProjectReference Include="..\..\integrations\ordercloud.integrations.avalara\ordercloud.integrations.avalara.csproj" />
     <ProjectReference Include="..\..\integrations\ordercloud.integrations.cardconnect\ordercloud.integrations.cardconnect.csproj" />

@@ -1,3 +1,5 @@
+using AzureStorageUtilities.Default;
+using AzureStorageUtilities.Interfaces;
 using Headstart.Common;
 using Headstart.Models;
 using OrderCloud.SDK;
@@ -11,18 +13,21 @@ namespace Headstart.API.Commands
     public interface IHSRegisterCommand
     {
         Task<HSRegister> Create(HSRegister register);
-        Task<HSRegister> ApproveOrDenyBuyerAccess(BuyerAccessApproval request);
+        Task ApproveOrDenyBuyerAccess(BuyerAccessApproval request);
         Task<IEnumerable<HSRegister>> List();
     }
     public class HSRegisterCommand : IHSRegisterCommand
     {
         private readonly IOrderCloudClient _oc;
         private readonly AppSettings _settings;
-
+        private readonly ITable _table;
+        //var token = ocClient.TokenResponse.AccessToken;
         public HSRegisterCommand(AppSettings settings, IOrderCloudClient oc)
         {
             _settings = settings;
             _oc = oc;
+            var storage = new AzureStorage(_settings.BlobSettings.ConnectionString);
+            _table = storage.GetTable("BuyerAccessRequests");
         }
 
         public async Task<HSRegister> Create(HSRegister register)
@@ -30,7 +35,7 @@ namespace Headstart.API.Commands
             var users = await _oc.AdminUsers.ListAsync<HSRegister>(search: register.Username.Trim());
             var existingRegister = users.Items.FirstOrDefault(x => x.Username.ToLower().Trim() == register.Username.ToLower().Trim());
 
-            register.xp.BuyerAccessRequests.ToList().ForEach(x => x.Approved = null); // makes sure nothing can be sent in approved
+            register.BuyerAccessRequests.ToList().ForEach(x => x.Approved = null); // makes sure nothing can be sent in approved
 
             if (existingRegister != null)
             {
@@ -46,49 +51,52 @@ namespace Headstart.API.Commands
                     throw;
                 }
 
-                var requestsToAdd = register.xp.BuyerAccessRequests
-                    .Where(r => !existingRegister.xp.BuyerAccessRequests
+                var existingRequests = await _table.GetAsync<BuyerAccessRequest>(existingRegister.ID);
+                var requestsToAdd = register.BuyerAccessRequests
+                    .Where(r => !existingRegister.BuyerAccessRequests
                         .Where(er => er.Approved.HasValue)
-                        .Select(x => x.BuyerId).Contains(r.BuyerId));
+                        .Select(x => x.BuyerId).Contains(r.BuyerId))
+                    .ToList();
+                requestsToAdd.ForEach(bar => bar.UserId = existingRegister.ID);
+                await _table.AddAsync(requestsToAdd);
 
-                var partialUser = new PartialUser<RegisterXp>()
-                {
-                    xp = new {
-                        BuyerAccessRequests = existingRegister.xp.BuyerAccessRequests.Concat(requestsToAdd)
-                    },
-                };
-                return await _oc.AdminUsers.PatchAsync<HSRegister>(existingRegister.ID, partialUser);
+                return existingRegister;
             }
             else
             {
-                return await _oc.AdminUsers.CreateAsync<HSRegister>(register);
+                var user = await _oc.AdminUsers.CreateAsync<HSRegister>(register);
+                register.BuyerAccessRequests.ToList().ForEach(bar => bar.UserId = user.ID);
+                await _table.AddAsync(register.BuyerAccessRequests);
+                return user;
             }
         }
 
         public async Task<IEnumerable<HSRegister>> List()
         {
             var users = (await _oc.AdminUsers.ListAsync<HSRegister>()).Items;
-            return users.Where(x => x.xp != null && x.xp.BuyerAccessRequests != null && x.xp.BuyerAccessRequests.Any(x => !x.Approved.HasValue));
+            foreach(var user in users)
+            {
+                var requests = await _table.GetAsync<BuyerAccessRequest>(user.ID);
+                if (requests.Any(x => x.Approved == null))
+                    user.BuyerAccessRequests = requests.Where(x => x.Approved == null).ToList();
+            }
+
+            return users.Where(x => x.BuyerAccessRequests.Any());
         }
 
-        public async Task<HSRegister> ApproveOrDenyBuyerAccess(BuyerAccessApproval buyerAccessApproval)
+        public async Task ApproveOrDenyBuyerAccess(BuyerAccessApproval buyerAccessApproval)
         {
             var user = await _oc.AdminUsers.GetAsync<HSRegister>(buyerAccessApproval.UserId);
-            var requests = user.xp.BuyerAccessRequests.ToList();
+            var requests = await _table.GetAsync<BuyerAccessRequest>(user.ID);
             foreach(var request in requests)
             {
                 if (request.BuyerId.Equals(buyerAccessApproval.BuyerId, StringComparison.InvariantCultureIgnoreCase))
+                {
                     request.Approved = buyerAccessApproval.Approved;
+                    await ActivateBuyerAccess(buyerAccessApproval);
+                    await _table.SaveAsync(request);
+                }
             }
-
-            var partialUser = new PartialUser<RegisterXp>()
-            {
-                xp = new { BuyerAccessRequests = requests },
-                Active = buyerAccessApproval.Approved || user.Active
-            };
-            await ActivateBuyerAccess(buyerAccessApproval);
-
-            return await _oc.AdminUsers.PatchAsync<HSRegister>(user.ID, partialUser);
         }
 
         private async Task ActivateBuyerAccess(BuyerAccessApproval buyerAccessApproval)
