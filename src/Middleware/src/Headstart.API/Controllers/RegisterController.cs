@@ -7,6 +7,7 @@ using ordercloud.integrations.library;
 using Headstart.API.Commands;
 using OrderCloud.Catalyst;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Headstart.Common.Controllers
 {
@@ -42,6 +43,17 @@ namespace Headstart.Common.Controllers
         public async Task<IEnumerable<HSRegister>> Get()
         {
             return await _command.List();
+        }
+
+        [HttpGet, Route("brand/{brand}")]
+        public async Task<IActionResult> GetBrand(string brand)
+        {
+            var stream = await _command.GetStylesheetForBrand(brand);
+
+            if (stream == null)
+                return NotFound();
+
+            return File(stream, "text/css");
         }
     }
 }

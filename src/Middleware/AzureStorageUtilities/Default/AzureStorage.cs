@@ -8,6 +8,7 @@ namespace AzureStorageUtilities.Default
     {
         public CloudStorageAccount Account { get; }
         public Dictionary<string, ITable> Tables { get; } = new Dictionary<string, ITable>();
+        public Dictionary<string, IBlob> BlobContainers { get; } = new Dictionary<string, IBlob>();
 
         public AzureStorage(string connectionString)
         {
@@ -19,6 +20,13 @@ namespace AzureStorageUtilities.Default
             if (!Tables.ContainsKey(tableName))
                 Tables.Add(tableName, new AzureTable(Account, tableName));
             return Tables[tableName];
+        }
+
+        public IBlob GetBlobContainer(string blobContainer)
+        {
+            if (!BlobContainers.ContainsKey(blobContainer))
+                BlobContainers.Add(blobContainer, new AzureBlob(Account, blobContainer));
+            return BlobContainers[blobContainer];
         }
     }
 }

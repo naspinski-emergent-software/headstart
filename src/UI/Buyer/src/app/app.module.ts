@@ -185,6 +185,7 @@ import { MeProductResolver } from './resolves/me.product.resolve'
 import { AuthService } from './services/auth/auth.service'
 import { CreditCardService } from './services/current-user/credit-card.service'
 import { CurrentUserService } from './services/current-user/current-user.service'
+import { BrandingService }from './services/current-user/branding.service'
 import { ExchangeRatesService } from './services/exchange-rates/exchange-rates.service'
 import { OrderHistoryService } from './services/order-history/order-history.service'
 import { OrdersToApproveStateService } from './services/order-history/order-to-approve-state.service'
@@ -390,6 +391,7 @@ const components = [
     CreditCardService,
     CurrentOrderService,
     CurrentUserService,
+    BrandingService,
     ExchangeRatesService,
     OrderHistoryService,
     OrdersToApproveStateService,

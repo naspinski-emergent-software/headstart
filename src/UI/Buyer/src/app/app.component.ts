@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { ShopperContextService } from './services/shopper-context/shopper-context.service'
 import { StaticPageService } from './services/static-page/static-page.service'
+import { BrandingService } from './services/current-user/branding.service'
 
 @Component({
   selector: 'app-root',
@@ -11,10 +12,12 @@ export class AppComponent implements OnInit {
   showHeader = false
   // TODO: this shouln't have hard coded routes. its gross.
   hiddenRoutes = ['/login', '/register', '/forgot-password', '/reset-password']
+  stylesheetUrl: string
 
   constructor(
     public context: ShopperContextService,
-    private staticPages: StaticPageService
+    private staticPages: StaticPageService,
+    private branding: BrandingService
   ) {}
 
   ngOnInit(): void {
@@ -26,6 +29,8 @@ export class AppComponent implements OnInit {
       }
     })
     this.staticPages.initialize()
+
+    this.branding.Apply()
   }
 
   getPageTitle(url: string): string {

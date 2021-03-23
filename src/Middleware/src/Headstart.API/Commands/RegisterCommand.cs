@@ -21,6 +21,7 @@ namespace Headstart.API.Commands
         private readonly IOrderCloudClient _oc;
         private readonly AppSettings _settings;
         private readonly ITable _table;
+        private readonly IBlob _blob;
         //var token = ocClient.TokenResponse.AccessToken;
         public HSRegisterCommand(AppSettings settings, IOrderCloudClient oc)
         {
