@@ -103,19 +103,28 @@ namespace Headstart.API.Commands
         {
             if (buyerAccessApproval.Approved)
             {
+                await _oc.AdminUsers.PatchAsync(buyerAccessApproval.UserId, new PartialUser() { Active = true });
                 // add to the user group (silent if they are already in it)
                 await _oc.AdminUserGroups.SaveUserAssignmentAsync(new UserGroupAssignment()
                 {
                      UserGroupID = "Admin_BuyerImpersonator",
                      UserID = buyerAccessApproval.UserId
                 });
-                await _oc.ImpersonationConfigs.CreateAsync(new ImpersonationConfig()
+                try //best way to do this is just try to add it, will throw if it doesn't exist
                 {
-                    ImpersonationUserID = buyerAccessApproval.UserId,
-                    BuyerID = buyerAccessApproval.BuyerId,
-                    SecurityProfileID = "HSBuyerAdmin",
-                    ClientID = _settings.OrderCloudSettings.MiddlewareClientID
-                });
+                    await _oc.ImpersonationConfigs.CreateAsync(new ImpersonationConfig()
+                    {
+                        ImpersonationUserID = buyerAccessApproval.UserId,
+                        BuyerID = buyerAccessApproval.BuyerId,
+                        SecurityProfileID = "HSBuyerAdmin",
+                        ClientID = _settings.OrderCloudSettings.MiddlewareClientID
+                    });
+                }
+                catch (Exception ex)
+                {
+                    if (!ex.Message.StartsWith("IdExists:"))
+                        throw ex;
+                }
             }
         }
     }
