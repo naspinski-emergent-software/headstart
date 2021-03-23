@@ -15,7 +15,11 @@ export class BrandingService {
       : { Name: brand, BlobUrl: `https://stgordercloud.blob.core.windows.net/branding-css/${brand.toLowerCase()}.css` }
   }
 
-  Apply() {
+  GetStylesheetUrl = (): string => {
+    return 'asd'
+  }
+
+  Apply = (): void => {
     // Create link
     let link = document.createElement('link');
     link.href = this.Get().BlobUrl;

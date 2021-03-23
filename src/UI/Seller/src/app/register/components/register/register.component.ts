@@ -96,7 +96,6 @@ export class RegisterComponent {
   }
   
   async onSubmit(): Promise<void> {
-    debugger
     await this.registerService.postRegistration(this.register)
       .then(x => {
         if (x.Email) {

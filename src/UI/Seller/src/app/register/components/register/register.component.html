@@ -120,7 +120,7 @@
                   <div class="form-row">
                     <div class="form-group col-md-12">
                       <ul>
-                        <li *ngFor="let request of register.buyerAccessRequests">
+                        <li *ngFor="let request of register.BuyerAccessRequests">
                           {{ request.BuyerName }}
                           <fa-icon class="mr-2 text-muted" [icon]="faTrash" (click)="removeBuyerAccessRequest(request.BuyerId)"></fa-icon>
                         </li>

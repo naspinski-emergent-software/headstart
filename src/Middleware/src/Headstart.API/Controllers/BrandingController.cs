@@ -21,7 +21,7 @@ namespace Headstart.Common.Controllers
             _oc = oc;
         }
 
-        [HttpGet, Route("brand/{brand}")]
+        [HttpGet, Route("{brand}")]
         public async Task<IActionResult> Stylesheet(string brand)
         {
             var stream = await _command.GetStylesheetForBrand(brand);

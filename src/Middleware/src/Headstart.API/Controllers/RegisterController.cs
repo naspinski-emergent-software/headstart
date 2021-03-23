@@ -44,16 +44,5 @@ namespace Headstart.Common.Controllers
         {
             return await _command.List();
         }
-
-        [HttpGet, Route("brand/{brand}")]
-        public async Task<IActionResult> GetBrand(string brand)
-        {
-            var stream = await _command.GetStylesheetForBrand(brand);
-
-            if (stream == null)
-                return NotFound();
-
-            return File(stream, "text/css");
-        }
     }
 }
