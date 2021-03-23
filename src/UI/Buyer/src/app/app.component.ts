@@ -10,7 +10,7 @@ import { BrandingService } from './services/current-user/branding.service'
 })
 export class AppComponent implements OnInit {
   showHeader = false
-  // TODO: this shouln't have hard coded routes. its gross.
+  // TODO: this shouldn't have hard coded routes. its gross.
   hiddenRoutes = ['/login', '/register', '/forgot-password', '/reset-password']
   stylesheetUrl: string
 

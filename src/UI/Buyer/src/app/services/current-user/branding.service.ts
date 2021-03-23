@@ -1,18 +1,24 @@
 import { Injectable } from '@angular/core'
 import { Branding } from 'src/app/models/branding.types'
+import { AppConfig } from 'src/app/models/environment.types'
 
 @Injectable({
   providedIn: 'root',
 })
 export class BrandingService {
-  constructor() {}
+  constructor(
+    private appConfig: AppConfig
+  ) {}
 
-  Get(): Branding {
+  Get = (): Branding => {
     const urlParams = new URLSearchParams(window.location.search);
     const brand = urlParams.get('brand');
-    return brand === undefined || brand == null || brand.length < 1
-      ? { Name: "Default", BlobUrl: 'https://stgordercloud.blob.core.windows.net/branding-css/_default.css' }
-      : { Name: brand, BlobUrl: `https://stgordercloud.blob.core.windows.net/branding-css/${brand.toLowerCase()}.css` }
+    const hasBrand: boolean = brand !== undefined && brand !== null && brand.length > 0;
+    return {
+      Name: hasBrand ? brand : "Default",
+      BlobUrl: `${this.appConfig.middlewareUrl}/branding/${hasBrand ? brand : "_default"}.css`,
+      ClientID: this.appConfig.clientID
+    }
   }
 
   GetStylesheetUrl = (): string => {

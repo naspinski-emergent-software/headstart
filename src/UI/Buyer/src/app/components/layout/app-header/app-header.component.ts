@@ -25,6 +25,7 @@ import { CurrentUser } from 'src/app/models/profile.types'
 import { AppConfig } from 'src/app/models/environment.types'
 import { ProductFilters } from 'src/app/models/filter-config.types'
 import { RouteConfig } from 'src/app/models/shared.types'
+import { BrandingService } from 'src/app/services/current-user/branding.service'
 
 @Component({
   templateUrl: './app-header.component.html',
@@ -66,11 +67,13 @@ export class OCMAppHeader implements OnInit {
   faTimes = faTimes
   faBoxOpen = faBoxOpen
   flagIcon: string
+  brand: string
 
   constructor(
     public context: ShopperContextService,
     public appConfig: AppConfig,
-    public staticPageService: StaticPageService
+    public staticPageService: StaticPageService,
+    private branding: BrandingService
   ) {
     this.profileRoutes = context.router.getProfileRoutes()
     this.orderRoutes = context.router.getOrderRoutes()
@@ -94,6 +97,7 @@ export class OCMAppHeader implements OnInit {
     this.context.router.onUrlChange((path) => (this.activePath = path))
     this.buildAddToCartListener()
     this.flagIcon = this.getCurrencyFlag()
+    this.brand = this.branding.Get().Name
   }
 
   // TODO: add PageDocument type to cms library so this is strongly typed
