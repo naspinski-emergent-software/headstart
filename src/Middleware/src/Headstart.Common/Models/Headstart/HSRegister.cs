@@ -17,6 +17,7 @@ namespace Headstart.Models
     public class HSRegister : User, IHSObject
     {
         public IEnumerable<BuyerAccessRequest> BuyerAccessRequests { get; set; } = new List<BuyerAccessRequest>();
+        public string BuyerClientId { get; set; }
     }
 
     //[SwaggerModel]

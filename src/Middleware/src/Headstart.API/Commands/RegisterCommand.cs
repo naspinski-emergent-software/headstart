@@ -21,8 +21,7 @@ namespace Headstart.API.Commands
         private readonly IOrderCloudClient _oc;
         private readonly AppSettings _settings;
         private readonly ITable _table;
-        private readonly IBlob _blob;
-        //var token = ocClient.TokenResponse.AccessToken;
+
         public HSRegisterCommand(AppSettings settings, IOrderCloudClient oc)
         {
             _settings = settings;
@@ -42,7 +41,7 @@ namespace Headstart.API.Commands
             {
                 try
                 {
-                    var tempToken = await _oc.AuthenticateAsync("078B4032-EA12-431F-B32B-4DAF790A152F", register.Username, register.Password, new[] { ApiRole.BuyerAdmin });
+                    var tempToken = await _oc.AuthenticateAsync(register.BuyerClientId, register.Username, register.Password, new[] { ApiRole.BuyerAdmin });
                     if (string.IsNullOrWhiteSpace(tempToken.AccessToken))
                         throw new AccessViolationException("invalid password supplied");
                 }

@@ -34,7 +34,7 @@ export class RegisterService {
 
   public postRegistration = async (registerModel: RegisterModel): Promise<User> => {
     registerModel.Active = false;
-    debugger;
+    registerModel.BuyerClientId = ocAppConfig.clientID
     return (await axios.post(`${ocAppConfig.middlewareUrl}/adminuser/register`, registerModel)).data
   }
 

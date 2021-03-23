@@ -65,6 +65,7 @@ export class RegisterModel {
   Username: string = ''
   Password: string = ''
   Active: boolean = false
+  BuyerClientId: string = ''
 }
 
 export class BuyerAccessRequest {
