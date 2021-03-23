@@ -76,7 +76,6 @@ export class RegisterComponent {
   }
 
   updateBuyerAccessRequest(buyerId: string, isDelete: boolean): void {
-    debugger
     const updateRegisterCopy: RegisterModel = this.getRegister()
     if (buyerId && buyerId.length > 0) {
       const existingBuyer = updateRegisterCopy.BuyerAccessRequests.find(x => x.BuyerId === buyerId);

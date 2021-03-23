@@ -1,10 +1,10 @@
 // angular
 import { Component, OnInit } from '@angular/core'
 import { FormGroup, FormControl } from '@angular/forms'
-import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr'
 import { AppConfig } from 'src/app/models/environment.types'
 import { ShopperContextService } from 'src/app/services/shopper-context/shopper-context.service'
+import { BrandingService } from 'src/app/services/current-user/branding.service'
 
 @Component({
   templateUrl: './login.component.html',
@@ -13,18 +13,17 @@ import { ShopperContextService } from 'src/app/services/shopper-context/shopper-
 export class OCMLogin implements OnInit {
   form: FormGroup
   appName: string
+  brand: string
 
   constructor(
     private context: ShopperContextService,
     private toasterService: ToastrService,
     public appConfig: AppConfig,
-    private router: ActivatedRoute
+    private branding: BrandingService
   ) {}
 
   ngOnInit(): void {
-    if (this.router.snapshot.queryParams.r) {
-
-    }
+    this.brand = this.branding.Get().Name
     this.appName = this.context.appSettings.appname
     this.form = new FormGroup({
       username: new FormControl(''),
