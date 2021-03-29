@@ -7,6 +7,7 @@ using ordercloud.integrations.library;
 using Headstart.API.Commands;
 using OrderCloud.Catalyst;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Headstart.Common.Controllers
 {
@@ -49,6 +50,34 @@ namespace Headstart.Common.Controllers
         public async Task<List<Buyer>> GetAll()
         {
             return await _oc.Buyers.ListAllAsync();
+        }
+
+        [DocName("GET All Headstart Buyers filtered")]
+        [HttpGet("my")]
+        public async Task<ListPage<Buyer>> GetAllFiltered()
+        {
+            var me = await _oc.Me.GetAsync();
+            var fullAccess = me.AvailableRoles.Contains(ApiRole.FullAccess.ToString()) || me.AvailableRoles.Contains(ApiRole.BuyerAdmin.ToString());
+            var impersonateAccess = me.AvailableRoles.Contains(ApiRole.BuyerImpersonation.ToString());
+            if (!(fullAccess || impersonateAccess))
+                throw new System.Exception("unable to list filtered buyers");
+
+            var buyers = await _oc.Buyers.ListAllAsync();
+            var listPage = new ListPage<Buyer>()
+            {
+                Items = buyers,
+                Meta = new ListPageMeta() { Page = 1, PageSize = 1000, TotalCount = buyers.Count, TotalPages = 1 }
+            };
+
+            if (!fullAccess)
+            {
+                var impersonationBuyerIds = (await _oc.ImpersonationConfigs.ListAsync(search: me.ID, searchOn: "ImpersonationUserID"))
+                    .Items.Select(x => x.BuyerID);
+                listPage.Items = buyers.Where(x => impersonationBuyerIds.Contains(x.ID)).ToList();
+                listPage.Meta.TotalCount = listPage.Items.Count;
+            }
+
+            return listPage;
         }
     }
 }

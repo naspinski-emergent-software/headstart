@@ -3,8 +3,9 @@ import { Router, ActivatedRoute } from '@angular/router'
 import { ResourceCrudService } from '@app-seller/shared/services/resource-crud/resource-crud.service'
 import { CurrentUserService } from '@app-seller/shared/services/current-user/current-user.service'
 import { BuyerTempService } from '@app-seller/shared/services/middleware-api/buyer-temp.service'
-import { Buyer, Buyers } from 'ordercloud-javascript-sdk'
+import { Buyer, Buyers, ListPage } from 'ordercloud-javascript-sdk'
 import { ListArgs } from '@ordercloud/headstart-sdk'
+import { ResourceType } from '@ordercloud/angular-cms-components/shared/models/resource-type.interface'
 
 export const BUYER_SUB_RESOURCE_LIST = [
   { route: 'users', display: 'ADMIN.NAV.USERS' },
@@ -51,5 +52,9 @@ export class BuyerService extends ResourceCrudService<Buyer> {
   addIntrinsicListArgs(options: ListArgs): ListArgs {
     options.sortBy = ['NAME']
     return options
+  }
+  
+  async list(args: any[]): Promise<ListPage<any>> {
+    return await this.buyerTempService.listMyBuyers()
   }
 }

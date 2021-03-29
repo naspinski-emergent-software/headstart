@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@angular/core'
 import { applicationConfiguration } from '@app-seller/config/app.config'
 import { HSBuyerPriceMarkup } from '@app-seller/models/buyer-markups.types'
 import { AppConfig } from '@app-seller/models/environment.types'
-import { OcTokenService } from '@ordercloud/angular-sdk'
+import { Buyer, ListPage, OcTokenService } from '@ordercloud/angular-sdk'
 
 // WHOPLE FILE TO BE REPLACED BY SDK
 
@@ -49,6 +49,11 @@ export class BuyerTempService {
         headers: this.buildHeaders(),
       })
       .toPromise()
+  }
+
+  async listMyBuyers(): Promise<any> {
+    const url = `${this.appConfig.middlewareUrl}/buyer/my`
+    return await this.http.get(url, {headers: this.buildHeaders()}).toPromise()
   }
 
   async createPermissionGroup(buyerID: string, buyerLocationID: string, permissionGroupID: string): Promise<any> {
