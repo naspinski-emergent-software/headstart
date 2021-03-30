@@ -40,6 +40,7 @@ namespace Headstart.Models
         public string UserId { get => PartitionKey; set => PartitionKey = value; }
         public string BuyerName { get; set; }
         public bool? Approved { get; set; }
+        public string UserName { get; set; }
     }
 
     public class BuyerAccessApproval

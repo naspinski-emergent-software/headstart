@@ -57,7 +57,11 @@ namespace Headstart.API.Commands
                         .Where(er => er.Approved.HasValue)
                         .Select(x => x.BuyerId).Contains(r.BuyerId))
                     .ToList();
-                requestsToAdd.ForEach(bar => bar.UserId = existingRegister.ID);
+                requestsToAdd.ForEach(bar =>
+                {
+                    bar.UserId = existingRegister.ID;
+                    bar.UserName = existingRegister.Username;
+                });
                 await _table.AddAsync(requestsToAdd);
 
                 return existingRegister;
