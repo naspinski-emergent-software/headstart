@@ -120,7 +120,7 @@ namespace Headstart.API.Commands
                     {
                         ImpersonationUserID = buyerAccessApproval.UserId,
                         BuyerID = buyerAccessApproval.BuyerId,
-                        SecurityProfileID = "HSBuyerAdmin",
+                        SecurityProfileID = "Admin_BuyerImpersonator",
                         ClientID = _settings.OrderCloudSettings.MiddlewareClientID
                     });
                 }

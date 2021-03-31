@@ -139,13 +139,13 @@ const SupplierOrderNavGrouping: HSRoute = {
 
 // Buyers
 const AllBuyers: HSRoute = {
-  rolesWithAccess: [HSRoles.HSBuyerAdmin, HSRoles.HSBuyerReader],
+  rolesWithAccess: [HSRoles.HSBuyerAdmin, HSRoles.HSBuyerReader, "BuyerImpersonation"],
   title: 'ALIAS.ALL_BUYERS',
   route: '/buyers',
 }
 
 const BuyerUsers: HSRoute = {
-  rolesWithAccess: [HSRoles.HSBuyerAdmin, HSRoles.HSBuyerReader],
+  rolesWithAccess: [HSRoles.HSBuyerAdmin, HSRoles.HSBuyerReader, "BuyerImpersonation"],
   title: 'ADMIN.NAV.USERS',
   route: `/buyers/${REDIRECT_TO_FIRST_PARENT}/users`,
 }

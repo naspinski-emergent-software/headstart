@@ -1,11 +1,11 @@
-using Headstart.Models;
-using OrderCloud.SDK;
-using System.Threading.Tasks;
-using Headstart.Models.Misc;
-using ordercloud.integrations.library;
-using System.Linq;
 using Headstart.Common;
+using Headstart.Models;
+using Headstart.Models.Misc;
+using OrderCloud.Catalyst;
+using OrderCloud.SDK;
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Headstart.API.Commands
 {
@@ -14,6 +14,8 @@ namespace Headstart.API.Commands
         Task<SuperHSBuyer> Create(SuperHSBuyer buyer, string accessToken, bool isSeedingEnvironment = false);
         Task<SuperHSBuyer> Get(string buyerID, string token = null);
         Task<SuperHSBuyer> Update(string buyerID, SuperHSBuyer buyer, string token);
+        Task<ListPage<Buyer>> MyBuyers(string token);
+        Task<ListPage<User>> MyUsers(string token);
     }
     public class HSBuyerCommand : IHSBuyerCommand
     {
@@ -113,7 +115,7 @@ namespace Headstart.API.Commands
                 BuyerID = ocBuyer.ID
             }, token);
 
-            await _oc.Incrementors.SaveAsync($"{ocBuyerID}-UserIncrementor", 
+            await _oc.Incrementors.SaveAsync($"{ocBuyerID}-UserIncrementor",
                 new Incrementor { ID = $"{ocBuyerID}-UserIncrementor", LastNumber = 0, LeftPaddingCount = 5, Name = "User Incrementor" }, token);
             await _oc.Incrementors.SaveAsync($"{ocBuyerID}-LocationIncrementor",
                 new Incrementor { ID = $"{ocBuyerID}-LocationIncrementor", LastNumber = 0, LeftPaddingCount = 4, Name = "Location Incrementor" }, token);
@@ -167,6 +169,37 @@ namespace Headstart.API.Commands
             {
                 Percent = (int)updatedBuyer.xp.MarkupPercent
             };
+        }
+
+        public async Task<ListPage<Buyer>> MyBuyers(string token)
+        {
+            var me = await _oc.Me.GetAsync(token);
+            var fullAccess = me.AvailableRoles.Contains(ApiRole.FullAccess.ToString()) || me.AvailableRoles.Contains(ApiRole.BuyerAdmin.ToString());
+            var impersonateAccess = me.AvailableRoles.Contains(ApiRole.BuyerImpersonation.ToString());
+            if (!(fullAccess || impersonateAccess))
+                throw new System.Exception("unable to list filtered buyers");
+
+            var buyers = await _oc.Buyers.ListAllAsync();
+            var listPage = new ListPage<Buyer>()
+            {
+                Items = buyers,
+                Meta = new ListPageMeta() { Page = 1, PageSize = 1000, TotalCount = buyers.Count, TotalPages = 1 }
+            };
+
+            if (!fullAccess)
+            {
+                var impersonationBuyerIds = (await _oc.ImpersonationConfigs.ListAsync(search: me.ID, searchOn: "ImpersonationUserID"))
+                    .Items.Select(x => x.BuyerID);
+                listPage.Items = buyers.Where(x => impersonationBuyerIds.Contains(x.ID)).ToList();
+                listPage.Meta.TotalCount = listPage.Items.Count;
+            }
+
+            return listPage;
+        }
+
+        public Task<ListPage<User>> MyUsers(string token)
+        {
+            throw new NotImplementedException();
         }
     }
 }

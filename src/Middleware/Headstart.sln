@@ -10,7 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0B969DE0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{914CFF67-B4A4-464F-B3DB-23A8B09F88E2}"
 	ProjectSection(SolutionItems) = preProject
-		nuget.config = nuget.config
+		pipeline.yaml = pipeline.yaml
+		README.txt = README.txt
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ordercloud.integrations.library", "integrations\ordercloud.integrations.library\ordercloud.integrations.library.csproj", "{854B7782-2147-4820-9237-86AE4FE741D5}"
@@ -43,12 +44,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ordercloud.integrations.eas
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "easypost.tests", "easypost.tests\easypost.tests.csproj", "{A5C99CFB-230B-4B94-9F3E-F2682BFA5D3B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3BE8F457-1F10-487A-B36B-E8189EFC5AEC}"
-	ProjectSection(SolutionItems) = preProject
-		README.txt = README.txt
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureStorageUtilities", "AzureStorageUtilities\AzureStorageUtilities.csproj", "{27CE36AF-1D45-4B5E-BF81-3562645AFDD9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureStorageUtilities", "AzureStorageUtilities\AzureStorageUtilities.csproj", "{27CE36AF-1D45-4B5E-BF81-3562645AFDD9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
