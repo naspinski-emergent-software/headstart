@@ -299,4 +299,6 @@ src/Middleware/ngrok.exe
 *.orig
 
 .DS_Store
+.env
+
 **/.history/*
